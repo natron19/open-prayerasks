@@ -1,0 +1,71 @@
+<div style="max-width: 720px;">
+  <%= form_with model: ask,
+        data: { controller: "form-submit", action: "submit->form-submit#disable" } do |f| %>
+
+    <% if ask.errors.any? %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% ask.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= f.label :whats_going_on, "What's going on", class: "form-label" %>
+      <%= f.text_area :whats_going_on, rows: 6, maxlength: Ask::MAX_LENGTH,
+            class: "form-control #{'is-invalid' if ask.errors[:whats_going_on].any?}",
+            placeholder: "Write it the way it comes. Half sentences are fine." %>
+      <div class="form-text">
+        Messy is fine; that is what the help is for. If you are in danger right now, please call or text 988
+        (in the US) or your local emergency number instead.
+      </div>
+      <% if ask.errors[:whats_going_on].any? %>
+        <div class="invalid-feedback"><%= ask.errors[:whats_going_on].first %></div>
+      <% end %>
+    </div>
+
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <%= f.label :asking_for, "What are you asking for?", class: "form-label" %>
+        <%= f.select :asking_for,
+              Ask::ASKING_FOR.map { |a| [ Ask::ASKING_FOR_LABELS[a], a ] },
+              {}, class: "form-select #{'is-invalid' if ask.errors[:asking_for].any?}" %>
+        <% if ask.errors[:asking_for].any? %>
+          <div class="invalid-feedback"><%= ask.errors[:asking_for].first %></div>
+        <% end %>
+      </div>
+      <div class="col-md-6">
+        <%= f.label :moment_on, "The date, if there is one", class: "form-label" %>
+        <%= f.date_field :moment_on, class: "form-control" %>
+        <div class="form-text">The surgery, the hearing, the interview. Optional.</div>
+      </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <%= f.label :vocabulary, "Our word for this", class: "form-label" %>
+        <%= f.select :vocabulary,
+              Ask::VOCABULARIES.map { |v| [ Ask::VOCABULARY_LABELS[v], v ] },
+              {}, class: "form-select #{'is-invalid' if ask.errors[:vocabulary].any?}" %>
+        <div class="form-text">How your community talks about holding each other&rsquo;s needs.</div>
+        <% if ask.errors[:vocabulary].any? %>
+          <div class="invalid-feedback"><%= ask.errors[:vocabulary].first %></div>
+        <% end %>
+      </div>
+      <div class="col-md-6">
+        <%= f.label :visibility, "Who sees your name", class: "form-label" %>
+        <%= f.select :visibility,
+              Ask::VISIBILITIES.map { |v| [ Ask::VISIBILITY_LABELS[v], v ] },
+              {}, class: "form-select #{'is-invalid' if ask.errors[:visibility].any?}" %>
+        <div class="form-text">Anonymous asks get a list of details that could still identify you.</div>
+        <% if ask.errors[:visibility].any? %>
+          <div class="invalid-feedback"><%= ask.errors[:visibility].first %></div>
+        <% end %>
+      </div>
+    </div>
+
+    <%= f.submit class: "btn btn-primary", data: { form_submit_target: "button" } %>
+  <% end %>
+</div>

@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 mb-0">My asks</h1>
+  <%= link_to "New ask", new_ask_path, class: "btn btn-primary btn-sm" %>
+</div>
+
+<% if @asks.empty? %>
+  <div class="text-center py-5">
+    <p class="text-muted mb-3">You haven&rsquo;t written an ask yet.</p>
+    <%= link_to "Write your first ask", new_ask_path, class: "btn btn-primary" %>
+  </div>
+<% else %>
+  <div class="row g-3">
+    <% @asks.each do |ask| %>
+      <% draft = ask.latest_ask_draft %>
+      <div class="col-12">
+        <%= link_to ask_path(ask), class: "text-decoration-none" do %>
+          <div class="card card-hover">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <h2 class="h5 card-title mb-1 text-body">
+                    <%= draft&.completed? ? draft.title : ask.summary(70) %>
+                  </h2>
+                  <p class="text-muted small mb-0">
+                    <%= ask.asking_for_label %> &middot; <%= ask.vocabulary_label %>
+                    <% if ask.anonymous? %>&middot; Anonymous<% end %>
+                    <% if ask.moment_on %>&middot; <%= ask.moment_on.strftime("%b %-d, %Y") %><% end %>
+                  </p>
+                </div>
+                <div class="text-end small flex-shrink-0">
+                  <% if draft&.completed? %>
+                    <div class="text-muted">reworded <%= time_ago_in_words(draft.generated_at) %> ago</div>
+                  <% elsif draft&.failed? %>
+                    <div class="text-muted fst-italic">last try could not be used</div>
+                  <% else %>
+                    <div class="text-muted fst-italic">in your own words</div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

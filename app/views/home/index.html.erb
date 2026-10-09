@@ -1,0 +1,95 @@
+<div class="text-center py-5">
+  <h1 class="display-5"><%= ENV.fetch("APP_NAME", "PrayerAsks Demo") %></h1>
+  <p class="lead text-muted mt-2"><%= ENV.fetch("APP_TAGLINE", "") %></p>
+  <p class="text-muted mx-auto mt-3" style="max-width: 640px;">
+    The hardest things are the hardest to put into words, and a community can only carry what it is told.
+    Write what is going on the way it comes to you. You get one gentler wording of exactly what you wrote,
+    every fact kept and nothing added and never longer, plus the date to remember, ideas for practical help if
+    you asked for it, and the quiet question you would be asked afterwards. It never writes a prayer, a
+    blessing or scripture. Asking for prayer is yours to do.
+  </p>
+  <div class="mt-4 d-flex justify-content-center gap-3">
+    <% if signed_in? %>
+      <%= link_to "Go to my asks", asks_path, class: "btn btn-primary btn-lg" %>
+    <% else %>
+      <%= link_to "Try it free", sign_up_path, class: "btn btn-primary btn-lg" %>
+      <%= link_to "Sign in", sign_in_path, class: "btn btn-outline-secondary btn-lg" %>
+    <% end %>
+  </div>
+</div>
+
+<hr class="my-5 opacity-25">
+
+<div class="mx-auto" style="max-width: 860px;">
+  <h2 class="h5 text-muted text-center mb-4">Example &mdash; a fictional anonymous ask</h2>
+
+  <div class="row g-3 mb-3">
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <p class="text-muted small mb-1">What they wrote</p>
+          <p class="mb-0 fst-italic text-muted">
+            &ldquo;my mum has her knee replacement on the 14th at Fernbrook and she is scared stiff, honestly so
+            am i. i cant get time off to drive her to physio after and my brother lives 3 hours away. i dont
+            really know how to ask for this, i just need people to hold her (and me) for a bit&rdquo;
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card h-100 reworded">
+        <div class="card-body">
+          <p class="text-muted small mb-1">A gentler wording</p>
+          <h3 class="h6 mb-2">Mum&rsquo;s knee replacement on the 14th</h3>
+          <p class="mb-0">
+            My mum has her knee replacement on the 14th at Fernbrook. She is scared, and honestly so am I.
+            Please hold her, and me, in your prayers. I can&rsquo;t get time off to drive her to physio
+            afterwards, and my brother lives three hours away, so a lift would mean a lot.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 small">
+    <div class="col-md-4">
+      <h3 class="h6">Practical help people could offer</h3>
+      <ul class="mb-0">
+        <li>Drive her to a physio appointment</li>
+        <li>Sit with her for an hour in the first week home</li>
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <h3 class="h6">The question afterwards</h3>
+      <p class="mb-2">Your mum&rsquo;s knee replacement was on the 14th. When you&rsquo;re ready, how did it go?</p>
+      <span class="outcome-answer me-1 mb-1">It was answered</span>
+      <span class="outcome-answer me-1 mb-1">It changed</span>
+      <span class="outcome-answer mb-1">It did not go as we hoped</span>
+    </div>
+    <div class="col-md-4">
+      <h3 class="h6">Details that could identify you</h3>
+      <ul class="mb-0">
+        <li>The hospital name and the date together</li>
+        <li>Your brother living three hours away</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="text-center text-muted small mt-4">
+    AI-generated. A suggestion in your own words, not a prayer and not advice.
+  </p>
+</div>
+
+<div class="text-center mt-5 pb-4">
+  <% unless signed_in? %>
+    <%= link_to "Get help saying yours &rarr;".html_safe, sign_up_path, class: "btn btn-primary" %>
+  <% end %>
+  <div class="mt-3 text-muted small">
+    If you are in danger or thinking about ending your life, please call or text 988 (in the US) or your local
+    emergency number. This demo is not a crisis service.
+  </div>
+  <div class="mt-2 text-muted small">
+    Open source &middot;
+    <a href="https://prayerasks.com" class="text-muted">PrayerAsks</a>
+  </div>
+</div>

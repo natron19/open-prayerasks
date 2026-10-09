@@ -1,0 +1,32 @@
+# Per-app guardrail configuration, read by AiGuardConfig.
+# See docs/ai-guardrails.md (Layer 5: AiOutputGuard) and docs/ai-evals.md.
+
+# PrayerAsks members write about the hardest thing they are carrying, so distress is in scope.
+# A match returns crisis resources (988) instead of an AI call. Same list as open-questiontap.
+crisis_terms:
+  - kill myself
+  - killing myself
+  - end my life
+  - take my own life
+  - suicide
+  - suicidal
+  - want to die
+  - wish i were dead
+  - hurt myself
+  - self harm
+  - self-harm
+  - no reason to live
+
+# Output structure rules per AiTemplate name. Templates not listed get the
+# generic output checks only (non-empty, no prompt leak, no profanity, no new PII).
+#   format:        text | json
+#   required_keys: top-level keys the JSON object must contain
+templates:
+  health_ping:
+    format: text
+  # AskDraftsController#parse_draft! reads all six keys; every one is always present (moment is null when the
+  # member gave no date, and the lists may be empty). The parser checks the shapes, the body length, the three
+  # outcome answers, the date, and the no-prayer rule.
+  prayerasks_ask_v1:
+    format: json
+    required_keys: [reworded_ask, what_changed, moment, practical_help_ideas, outcome_question, privacy_flags]

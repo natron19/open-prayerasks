@@ -1,0 +1,11 @@
+<div class="alert alert-warning">
+  <strong>The AI&rsquo;s answer could not be used.</strong>
+  <p class="mb-1"><%= draft.failure_reason %>.</p>
+  <p class="mb-2 small">
+    The answer did not match the expected shape or broke one of this app&rsquo;s rules: it never writes a
+    prayer, a blessing or scripture, never makes your ask longer, never adds a date you did not give, and always
+    gives three answers to the question afterwards. Try again, or keep your own words.
+  </p>
+  <%= render "asks/draft_button", ask: ask, label: "Retry",
+             button_class: "btn btn-outline-warning btn-sm" %>
+</div>

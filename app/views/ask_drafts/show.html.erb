@@ -1,0 +1,132 @@
+<% draft = @ask_draft %>
+<div data-controller="download-markdown"
+     data-download-markdown-content-value="<%= draft.completed? ? draft.to_markdown : '' %>"
+     data-download-markdown-filename-value="<%= draft.markdown_filename %>"
+     style="max-width: 860px;">
+
+  <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+    <div>
+      <p class="text-muted small mb-1">Help saying this</p>
+      <h1 class="h3 mb-1"><%= draft.completed? ? draft.title : @ask.summary(70) %></h1>
+      <p class="text-muted small mb-0">
+        <%= link_to "← My asks", asks_path, class: "text-muted" %>
+        &nbsp;&middot;&nbsp;
+        <%= link_to "What you wrote", ask_path(@ask), class: "text-muted" %>
+        &nbsp;&middot;&nbsp;
+        Written <%= draft.generated_at ? "#{time_ago_in_words(draft.generated_at)} ago" : "at an unknown time" %>
+      </p>
+    </div>
+    <div class="d-flex flex-wrap gap-2 align-items-start">
+      <%= link_to "Edit my ask", edit_ask_path(@ask), class: "btn btn-outline-secondary btn-sm" %>
+      <%= render "asks/draft_button", ask: @ask, label: "Try another wording",
+                 button_class: "btn btn-outline-secondary btn-sm" %>
+      <% if draft.completed? %>
+        <button class="btn btn-outline-primary btn-sm" type="button"
+                data-action="click->download-markdown#download">
+          Download .md
+        </button>
+      <% end %>
+      <button class="btn btn-outline-secondary btn-sm" type="button"
+              data-bs-toggle="collapse" data-bs-target="#raw-response"
+              aria-expanded="false" aria-controls="raw-response">
+        Show raw response
+      </button>
+    </div>
+  </div>
+
+  <p class="text-muted small mb-3">
+    <strong>AI-generated.</strong> A suggestion in your own words, not a prayer and not advice, and it can be
+    wrong. Use it, change it, or keep what you wrote.
+  </p>
+
+  <% if draft.stale? %>
+    <div class="alert alert-warning py-2 small">
+      You have edited your ask since this wording. Try another wording to see one for the new version.
+    </div>
+  <% end %>
+
+  <% if draft.failed? %>
+    <%= render "ask_drafts/parse_error", ask: @ask, draft: draft %>
+  <% elsif draft.completed? %>
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <h2 class="h6 text-muted mb-2">What you wrote</h2>
+        <div class="card h-100">
+          <div class="card-body">
+            <p class="ask-text mb-0 text-muted"><%= @ask.whats_going_on %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h2 class="h6 mb-2">A gentler wording</h2>
+        <div class="card h-100 reworded">
+          <div class="card-body">
+            <h3 class="h5 mb-2"><%= draft.title %></h3>
+            <p class="ask-text mb-0"><%= draft.body %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="mb-4"><span class="text-muted">What changed:</span> <%= draft.what_changed %></p>
+
+    <div class="row g-4 mb-4">
+      <% if draft.moment_on %>
+        <div class="col-md-6">
+          <h2 class="h5 mb-2">The date</h2>
+          <p class="mb-0">
+            <span class="moment-badge"><%= draft.moment_on.strftime("%a %b %-d") %></span>
+            <%= draft.moment_name %>
+          </p>
+          <p class="text-muted small mt-1 mb-0">In the full app, people carrying your ask hear about this date, and you get the question afterwards.</p>
+        </div>
+      <% end %>
+
+      <div class="col-md-6">
+        <h2 class="h5 mb-2">The question you&rsquo;ll be asked afterwards</h2>
+        <p class="mb-2"><%= draft.outcome_question %></p>
+        <ul class="list-unstyled mb-0">
+          <% draft.outcome_answers.each do |answer| %>
+            <li class="mb-1"><span class="outcome-answer"><%= answer %></span></li>
+          <% end %>
+        </ul>
+      </div>
+
+      <% if draft.practical_help_ideas.any? %>
+        <div class="col-md-6">
+          <h2 class="h5 mb-2">Practical help people could offer</h2>
+          <ul class="mb-0">
+            <% draft.practical_help_ideas.each do |item| %>
+              <li class="mb-1"><strong><%= item["idea"] %></strong><br><span class="text-muted small"><%= item["why"] %></span></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <% if @ask.anonymous? || draft.privacy_flags.any? %>
+        <div class="col-md-6">
+          <h2 class="h5 mb-2">Details that could identify you</h2>
+          <% if draft.privacy_flags.any? %>
+            <ul class="mb-1">
+              <% draft.privacy_flags.each do |flag| %>
+                <li class="mb-1"><%= flag %></li>
+              <% end %>
+            </ul>
+            <p class="text-muted small mb-0">They are kept in the wording. You decide whether to leave them in.</p>
+          <% else %>
+            <p class="text-muted mb-0">Nothing stood out.</p>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-muted fst-italic">This wording is still being written&hellip;</p>
+  <% end %>
+
+  <div class="collapse mt-3" id="raw-response">
+    <div class="card card-body">
+      <p class="text-muted small mb-1">Raw response from Gemini:</p>
+      <pre class="small mb-0 text-muted"><%= draft.gemini_raw %></pre>
+    </div>
+  </div>
+</div>
