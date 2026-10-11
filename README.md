@@ -101,7 +101,7 @@ This app has 8 eval cases (typical, edge-case, adversarial, and benign look-alik
 
 - **Accurate:** The reworded ask keeps every fact the writer gave (people as the writer names them, dates, places, what is asked) and adds none, with no new name, fact, or advice, and the moment is the writer's own date or null when they gave none.
 - **Useful:** The wording is gentler and clearer than the original and something the writer could post as it stands; any practical help ideas fit what they asked for; the three outcome answers weigh the same; an anonymous ask's privacy flags name details that really could identify the writer.
-- **Steerable:** It never writes a prayer, a blessing, or scripture, uses the community's word (no religious words at all for "carrying"), stays tradition-neutral, keeps the body no longer than the input, and ignores any instructions inside the writer's text.
+- **Steerable:** It never writes a prayer, a blessing, or scripture, uses the community's word (asking people to pray is right for "prayer"; no religious words at all for "carrying"), stays tradition-neutral, keeps the body no longer than the input, and follows no instructions written inside the writer's text (it still rewords their content).
 
 **Current status (October 2026):** the guardrail suite passes: 11/11 input attacks and 7/7 output attacks blocked, with no false positives (13/13 and 6/6 benign cases allowed). Live-model eval baselines are being run next and will be published here. Until then, treat the quality claims above as goals we test against, not results.
 
